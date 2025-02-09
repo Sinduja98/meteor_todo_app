@@ -27,6 +27,9 @@
                     {{/if}}
                 </button>
             </div>
+            {{#if isLoading}}
+                    <div class="loading">loading...</div>
+            {{/if}}
             <ul>
                 {{#each tasks}}
                     {{> task}}

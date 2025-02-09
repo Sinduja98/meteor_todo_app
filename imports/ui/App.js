@@ -1,5 +1,5 @@
 import { Template } from 'meteor/templating';
-import { TasksCollection } from '/imports/api/TasksCollection';
+import { TasksCollection } from '/imports/db/TasksCollection';
 import './Task.js';
 import './Login.js';
 import './App.html';
@@ -7,6 +7,7 @@ import './App.html';
 const HIDE_COMPLETED_STRING = "hideCompleted";
 const getUser = () => Meteor.user();
 const isUserLogged = () => !!getUser();
+const IS_LOADING_STRING = "isLoading";
 
 const getTasksFilter = () => {
   const user = getUser();
@@ -22,6 +23,11 @@ const getTasksFilter = () => {
  
 Template.mainContainer.onCreated(function mainContainerOnCreated() {
   this.state = new ReactiveDict();
+
+  const handler = Meteor.subscribe('tasks');
+  Tracker.autorun(() => {
+    this.state.set(IS_LOADING_STRING, !handler.ready());
+  });
 });
 
 Template.mainContainer.events({
@@ -70,6 +76,10 @@ Template.mainContainer.helpers({
   getUser() {
     return getUser();
   },
+  isLoading() {
+    const instance = Template.instance();
+    return instance.state.get(IS_LOADING_STRING);
+  }
 });
 
 
@@ -84,11 +94,7 @@ Template.form.events({
       const text = target.text.value;
   
       // Insert a task into the collection
-      TasksCollection.insert({
-        text,
-        userId: getUser()._id,
-        createdAt: new Date(), // current time
-      });
+      Meteor.call('tasks.insert', text);
   
       // Clear form
       target.text.value = '';
