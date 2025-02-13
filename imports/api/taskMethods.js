@@ -1,7 +1,37 @@
 import { check } from 'meteor/check';
 import { TasksCollection } from '/imports/db/TasksCollection';
+import { Accounts } from 'meteor/accounts-base';
  
 Meteor.methods({
+
+  'user.register': async function(username, password) {
+    check(username, String);
+    check(password, String);
+    
+    console.log('Registering user:', username);
+    
+    // Use Meteor.users collection to check for existing user
+    const existingUser = await Meteor.users.findOneAsync({ username: username });
+    console.log('Existing user:', existingUser);
+    if (existingUser) {
+      throw new Meteor.Error('user-exists', 'Username already exists.');
+    }
+
+    try {
+      // Create new user and return user ID
+      const userId = Accounts.createUser({
+        username: username,
+        password: password
+      });
+      
+      console.log('User created successfully with ID:', userId);
+      return userId;
+    } catch (error) {
+      console.error('Registration error:', error);
+      throw new Meteor.Error('registration-failed', error.reason || 'Registration failed');
+    }
+  },
+
 'tasks.insert': async function (text, isChecked = false) { 
   check(text, String);
   check(isChecked, Boolean); // Ensure isChecked is a Boolean
