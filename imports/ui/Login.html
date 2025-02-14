@@ -1,18 +1,15 @@
 <template name="login">
-    <form class="login-form">
-        <div>
-            <label for="username">Username</label>
-            <input type="text" placeholder="Username" name="username" required />
+    <form class="login-form d-flex flex-column align-items-center">
+        <div class="mb-3">
+            <label for="username"  class="form-label text-dark">Username</label>
+            <input type="text" class="form-control" name="username" required>
         </div>
-
-        <div>
-            <label for="password">Password</label>
-            <input type="password" placeholder="Password" name="password" required />
+        <div class="mb-3">
+            <label for="password" class="form-label text-dark">Password</label>
+            <input type="password" class="form-control" name="password" required>
         </div>
-
-        <div>
-            <button type="submit">Log In</button>
-            <button type="button" class="register-button">Register</button>
-        </div>
+        <button class="btn btn-primary" type="submit">Login</button>
+        <button type="button" class="register-button btn btn-primary">Register</button>
     </form>
+    
 </template>

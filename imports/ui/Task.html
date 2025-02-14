@@ -1,7 +1,10 @@
 <template name="task">
-    <li>
-        <input type="checkbox" checked="{{isChecked}}" class="toggle-checked" />
-        <span>{{text}}</span>
-        <button class="delete">&times;</button>
-    </li>
+    <ul class="list-group">
+        <li class="list-group-item d-flex justify-content-between">
+            <input type="checkbox" checked="{{isChecked}}" class="toggle-checked" />
+            <span>{{text}}</span>
+            <button class="btn btn-danger delete">&times;</button>
+        </li>
+    </ul>
+    
 </template>
